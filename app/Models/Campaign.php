@@ -1,21 +1,15 @@
 <?php
-// File: app/Models/Campaign.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str; // Import class Str
+use Illuminate\Support\Str;
 
 class Campaign extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'komunitas_id',
         'title',
@@ -29,9 +23,7 @@ class Campaign extends Model
     ];
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
+     * Otomatis membuat slug dari title saat campaign dibuat.
      */
     protected static function booted()
     {
@@ -41,10 +33,24 @@ class Campaign extends Model
     }
 
     /**
-     * Get the community that owns the campaign.
+     * Relasi ke model Komunitas.
      */
     public function komunitas()
     {
         return $this->belongsTo(Komunitas::class);
+    }
+
+    /**
+     * Accessor untuk menghitung persentase donasi.
+     * Ini akan membuat properti "donation_percentage" tersedia.
+     */
+    public function getDonationPercentageAttribute(): float
+    {
+        // Gunakan 'target_amount' dan 'current_amount' sesuai nama kolom dari dd()
+        if ($this->target_amount > 0 && $this->current_amount > 0) {
+            $percentage = ($this->current_amount / $this->target_amount) * 100;
+            return round($percentage, 2);
+        }
+        return 0;
     }
 }

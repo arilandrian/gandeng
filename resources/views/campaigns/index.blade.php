@@ -1,138 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Kampanye GANDENG</title>
-    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="{{ asset('css/campaigns.css') }}" rel="stylesheet" />
-    </head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('landing') }}">GANDENG</a>
-            <div class="navbar-menu">
-                <a href="#" class="active">Jelajahi Program</a>
-                <a href="#">Riwayat Donasi</a>
-                <a href="{{ route('login') }}">Login</a>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.app')
 
-    <div class="page-header">
-        <div class="container">
+{{-- Section untuk judul halaman, akan muncul di tab browser --}}
+@section('title', 'Jelajahi Program - GANDENG')
+
+{{-- Section untuk menambahkan file CSS khusus untuk halaman ini --}}
+@push('styles')
+    <link href="{{ asset('css/campaigns.css') }}" rel="stylesheet" />
+@endpush
+
+{{-- Section untuk konten utama halaman --}}
+@section('content')
+    <main>
+        <div class="page-header">
             <h1>Program Sosial</h1>
             <p>Temukan program sosial yang ingin Anda dukung</p>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="search-section">
-            <div class="search-filter">
-                <input type="text" placeholder="Cari nama program atau komunitas...">
-                <select>
-                    <option selected>Semua Kategori</option>
-                    <option value="pendidikan">Pendidikan</option>
-                    <option value="kesehatan">Kesehatan</option>
-                    <option value="lingkungan">Lingkungan</option>
-                    <option value="kemanusiaan">Kemanusiaan</option>
-                </select>
-                <select>
-                    <option selected>Semua Lokasi</option>
-                    <option value="kendari">Kendari</option>
-                    <option value="jakarta">Jakarta</option>
+        <div class="container">
+            <div class="filter-section">
+                <div class="filter-box">
+                    <input type="text" placeholder="Cari nama program atau komunitas...">
+                </div>
+                <div class="filter-box">
+                    <select>
+                        <option>Semua Kategori</option>
+                        <option>Pendidikan</option>
+                        <option>Kemanusiaan</option>
+                        <option>Lingkungan</option>
                     </select>
+                </div>
+                <div class="filter-box">
+                    <select>
+                        <option>Semua Lokasi</option>
+                        <option>Kendari</option>
+                        <option>Sulawesi Tenggara</option>
+                    </select>
+                </div>
             </div>
+
+            <div class="campaign-grid">
+                @forelse ($campaigns as $campaign)
+                    <div class="campaign-card">
+                        @if ($campaign->image_url)
+                            <img src="{{ str_starts_with($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}"
+                                class="card-img-top" alt="{{ $campaign->title }}">
+                        @else
+                            <div class="card-img-placeholder"></div>
+                        @endif
+
+                        <div class="card-body">
+                            <h3 class="card-title">{{ $campaign->title }}</h3>
+                            <p class="card-organization">{{ $campaign->komunitas->nama_organisasi ?? 'Komunitas GANDENG' }}
+                            </p>
+
+                            <div class="tags">
+                                @if ($campaign->category == 'Pendidikan')
+                                    <span class="tag tag-pendidikan">{{ $campaign->category }}</span>
+                                @elseif($campaign->category == 'Kemanusiaan')
+                                    <span class="tag tag-kemanusiaan">{{ $campaign->category }}</span>
+                                @elseif($campaign->category == 'Lingkungan')
+                                    <span class="tag tag-lingkungan">{{ $campaign->category }}</span>
+                                @else
+                                    <span class="tag tag-lainnya">{{ $campaign->category }}</span>
+                                @endif
+                                <span class="tag tag-lainnya">{{ $campaign->location }}</span>
+                            </div>
+
+                            <div class="progress-info">
+                                <span class="amount">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span>
+                                <span class="percentage">{{ round($campaign->donation_percentage) }}%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: {{ $campaign->donation_percentage }}%;"
+                                    aria-valuenow="{{ $campaign->donation_percentage }}" aria-valuemin="0"
+                                    aria-valuemax="100"></div>
+                            </div>
+                            <p class="target-info">Target: Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}
+                            </p>
+
+                            <div class="time-left">
+                                <i class="far fa-clock"></i>
+                                <span>Sisa waktu penggalangan dana</span>
+                            </div>
+
+                            <div class="card-actions">
+                                <a href="{{ route('campaigns.show')}}" class="btn-detail">Lihat
+                                    Detail</a>
+                                <a href="{{ route('campaigns.show') }}" class="btn-donate-now">Donasi
+                                    Sekarang</a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12 text-center" style="grid-column: 1 / -1;">
+                        <p>Belum ada program yang tersedia saat ini.</p>
+                    </div>
+                @endforelse
+            </div>
+
+            <div class="d-flex justify-content-center mt-5">
+                {{ $campaigns->links() }}
+            </div>
+
         </div>
-
-        <div class="grid-container">
-            {{-- Contoh Kartu Kampanye 1 --}}
-            <div class="campaign-card">
-                <div class="campaign-image" style="background-image: url('https://via.placeholder.com/600x400/ADD8E6/FFFFFF?text=Pendidikan+Anak');"></div>
-                <div class="campaign-content">
-                    <h3>Beasiswa Anak Yatim Sultra</h3>
-                    <div class="organization">Oleh Komunitas Harapan Bangsa</div>
-                    <div class="meta-info">
-                        <span class="category">Pendidikan</span>
-                        <span class="location">Kendari</span>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-info">
-                            <span>Terkumpul: Rp 15.000.000</span>
-                            <span>75%</span>
-                        </div>
-                        <div class="progress-bar-fill">
-                            <div class="progress-fill" style="width: 75%;"></div>
-                        </div>
-                        <div class="target">Target: Rp 20.000.000</div>
-                    </div>
-                    <div class="time-left"><i class="far fa-clock"></i> Tersisa 30 Hari</div>
-                    <div class="action-buttons">
-                        <a href="#" class="btn btn-detail">Lihat Detail</a>
-                        <a href="#" class="btn btn-donate">Donasi Sekarang</a>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Contoh Kartu Kampanye 2 --}}
-            <div class="campaign-card">
-                <div class="campaign-image" style="background-image: url('https://via.placeholder.com/600x400/FFA07A/FFFFFF?text=Bencana+Alam');"></div>
-                <div class="campaign-content">
-                    <h3>Bantu Korban Bencana Alam Sulawesi</h3>
-                    <div class="organization">Oleh Yayasan Peduli Sesama</div>
-                    <div class="meta-info">
-                        <span class="category">Kemanusiaan</span>
-                        <span class="location">Sulawesi Tenggara</span>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-info">
-                            <span>Terkumpul: Rp 62.000.000</span>
-                            <span>62%</span>
-                        </div>
-                        <div class="progress-bar-fill">
-                            <div class="progress-fill" style="width: 62%;"></div>
-                        </div>
-                        <div class="target">Target: Rp 100.000.000</div>
-                    </div>
-                    <div class="time-left"><i class="far fa-clock"></i> Tersisa 45 Hari</div>
-                    <div class="action-buttons">
-                        <a href="#" class="btn btn-detail">Lihat Detail</a>
-                        <a href="#" class="btn btn-donate">Donasi Sekarang</a>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Contoh Kartu Kampanye 3 --}}
-            <div class="campaign-card">
-                <div class="campaign-image" style="background-image: url('https://via.placeholder.com/600x400/90EE90/FFFFFF?text=Penghijauan');"></div>
-                <div class="campaign-content">
-                    <h3>Penghijauan Kota Kendari</h3>
-                    <div class="organization">Oleh Green Earth Community</div>
-                    <div class="meta-info">
-                        <span class="category">Lingkungan</span>
-                        <span class="location">Kendari</span>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-info">
-                            <span>Terkumpul: Rp 7.050.000</span>
-                            <span>47%</span>
-                        </div>
-                        <div class="progress-bar-fill">
-                            <div class="progress-fill" style="width: 47%;"></div>
-                        </div>
-                        <div class="target">Target: Rp 15.000.000</div>
-                    </div>
-                    <div class="time-left"><i class="far fa-clock"></i> Tersisa 20 Hari</div>
-                    <div class="action-buttons">
-                        <a href="#" class="btn btn-detail">Lihat Detail</a>
-                        <a href="#" class="btn btn-donate">Donasi Sekarang</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    </main>
+@endsection

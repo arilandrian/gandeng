@@ -1,283 +1,191 @@
-/* Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* File: public/css/campaigns.css */
+
+/* Mengimport font Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 body {
+    background-color: #F4F7F6;
     font-family: 'Poppins', sans-serif;
-    background-color: #F5F7FA;
-    color: #333;
-    line-height: 1.6;
 }
 
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Navbar Styles */
-.navbar {
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar-brand {
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #007BFF;
-}
-
-.navbar-menu {
-    display: flex;
-    gap: 25px;
-}
-
-.navbar-menu a {
-    text-decoration: none;
-    color: #555;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.navbar-menu a.active {
-    color: #007BFF;
-}
-
-.navbar-menu a:hover {
-    color: #007BFF;
-}
-
-/* Page Header */
+/* Header Halaman */
 .page-header {
     text-align: center;
     padding: 40px 0;
-    background-color: white;
-    margin-bottom: 30px;
 }
 
 .page-header h1 {
-    font-size: 2.2rem;
-    color: #007BFF;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
     margin-bottom: 10px;
 }
 
 .page-header p {
-    color: #666;
     font-size: 1.1rem;
+    color: #6c757d;
 }
 
-/* Search and Filter Section */
-.search-section {
-    margin-bottom: 30px;
-}
-
-.search-filter {
+/* Bagian Filter dan Pencarian */
+.filter-section {
     display: flex;
     gap: 15px;
-    flex-wrap: wrap;
+    margin-bottom: 40px;
+    justify-content: center;
 }
 
-.search-filter input {
-    flex: 1;
+.filter-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.filter-box input, .filter-box select {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 5px;
+}
+
+.filter-box input {
     min-width: 300px;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
 }
 
-.search-filter select {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
-    color: #555;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-/* Campaign Grid */
-.grid-container {
+/* Grid untuk kartu-kartu campaign */
+.campaign-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 25px;
-    margin-bottom: 50px;
+    gap: 30px;
 }
 
+/* Styling untuk setiap kartu campaign */
 .campaign-card {
-    background-color: white;
-    border-radius: 8px;
+    background: #fff;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .campaign-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
-.campaign-image {
+.card-img-placeholder {
     height: 180px;
-    background-color: #eee;
-    background-image: url('https://via.placeholder.com/600x400');
-    background-size: cover;
-    background-position: center;
+    background-color: #e9ecef;
 }
 
-.campaign-content {
+.card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-body {
     padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-.campaign-content h3 {
-    font-size: 1.3rem;
+.card-title {
+    font-weight: 600;
+    font-size: 1.2rem;
     margin-bottom: 8px;
-    color: #222;
 }
 
-.organization {
-    color: #666;
+.card-organization {
+    color: #6c757d;
     font-size: 0.9rem;
     margin-bottom: 15px;
 }
 
-.meta-info {
-    display: flex;
-    gap: 10px;
+/* Tags/Badges untuk kategori dan lokasi */
+.tags {
     margin-bottom: 15px;
 }
-
-.meta-info span {
-    padding: 4px 10px;
-    border-radius: 4px;
+.tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
+    margin-right: 5px;
 }
+.tag-pendidikan { background-color: #e9d5ff; color: #9333ea; }
+.tag-kemanusiaan { background-color: #fecaca; color: #dc2626; }
+.tag-lingkungan { background-color: #dcfce7; color: #16a34a; }
+.tag-lainnya { background-color: #e2e8f0; color: #475569; }
 
-.category {
-    background-color: #e6f7ff;
-    color: #007BFF;
-}
-
-.location {
-    background-color: #f0f0f0;
-    color: #555;
-}
-
-/* Progress Bar */
-.progress-container {
-    margin: 20px 0;
-}
-
+/* Progress Bar dan Info Donasi */
 .progress-info {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-}
-
-.progress-bar {
-    height: 8px;
-    background-color: #e9ecef;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background-color: #007BFF;
-    border-radius: 4px;
-}
-
-.target {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 5px;
-}
-
-.time-left {
-    color: #e67e22;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-/* Action Buttons */
-.action-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
     font-size: 0.9rem;
     font-weight: 500;
-    cursor: pointer;
+    margin-bottom: 8px;
+}
+.progress-info .amount { color: #0d6efd; }
+.progress-info .percentage { color: #6c757d; }
+
+.progress {
+    height: 8px;
+    border-radius: 4px;
+}
+
+.target-info {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 4px;
+    margin-bottom: 15px;
+}
+
+/* Sisa Waktu */
+.time-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #dc3545;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+/* Tombol Aksi */
+.card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: auto; /* Mendorong tombol ke bawah kartu */
+}
+.btn-detail, .btn-donate-now {
+    padding: 10px;
     text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
     text-decoration: none;
-    flex: 1;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
-
 .btn-detail {
-    background-color: #007BFF;
-    color: white;
+    background-color: #fff;
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
 }
-
 .btn-detail:hover {
-    background-color: #0069d9;
+    background-color: #0d6efd;
+    color: #fff;
 }
-
-.btn-donate {
-    background-color: #28a745;
-    color: white;
+.btn-donate-now {
+    background-color: #198754;
+    color: #fff;
+    border: 1px solid #198754;
 }
-
-.btn-donate:hover {
-    background-color: #218838;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .navbar .container {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .navbar-menu {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .grid-container {
-        grid-template-columns: 1fr;
-    }
-
-    .search-filter {
-        flex-direction: column;
-    }
-
-    .search-filter input, 
-    .search-filter select {
-        width: 100%;
-    }
+.btn-donate-now:hover {
+    background-color: #157347;
 }

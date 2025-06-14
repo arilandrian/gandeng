@@ -1,63 +1,76 @@
 <?php
-// File: app/Http/Controllers/CampaignController.php
 
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Import Auth
-use Illuminate\Support\Facades\Validator; // Import Validator
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CampaignController extends Controller
 {
+    /**
+     * Menampilkan daftar semua campaign yang aktif.
+     */
+    public function index()
+    {
+        // Mengambil semua campaign yang aktif untuk ditampilkan di halaman utama
+        $campaigns = Campaign::with('komunitas')
+                            ->where('status', 'active')
+                            ->latest()
+                            ->paginate(9);
+
+        return view('campaigns.index', compact('campaigns'));
+    }
+
+    /**
+     * Menampilkan halaman detail untuk satu campaign.
+     * @param  \App\Models\Campaign  $campaign
+     * @return \Illuminate\View\View
+     */
+    public function show(Campaign $campaign)
+    {
+        // Berkat Route Model Binding, Laravel otomatis menyuntikkan data campaign yang cocok
+        // Kirim data campaign tunggal tersebut ke view 'campaigns.show'
+        return view('campaigns.show', compact('campaign'));
+    }
+
+    /**
+     * Menampilkan form untuk membuat campaign baru.
+     */
     public function create()
     {
         return view('komunitas.create-campaign');
     }
 
+    /**
+     * Menyimpan campaign baru ke database.
+     */
     public function store(Request $request)
     {
-        // 1. Validasi Input
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'target_donation' => 'required|numeric|min:10000',
-            'end_date' => 'required|date|after:today',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // max 2MB
-        ]);
+        Validator::make($request->all(), [
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'target_donation' => ['required', 'numeric', 'min:50000'],
+            'end_date' => ['required', 'date', 'after:today'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+        ])->validate();
 
-        if ($validator->fails()) {
-            return redirect()->route('campaigns.create')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
+        $komunitas = Auth::user()->komunitas;
 
-        // 2. Dapatkan ID Komunitas yang Sedang Login
-        $user = Auth::user();
-        // Pastikan relasi 'komunitas' ada di model User Anda
-        $komunitasId = $user->komunitas->id;
+        $imagePath = $request->file('image')->store('campaign_images', 'public');
 
-        // 3. Handle Upload Gambar
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            // Simpan gambar ke storage/app/public/campaign_images
-            // dan dapatkan path-nya.
-            $imagePath = $request->file('image')->store('campaign_images', 'public');
-        }
-
-        // 4. Simpan Data ke Database
         Campaign::create([
-            'komunitas_id' => $komunitasId,
+            'komunitas_id' => $komunitas->id,
             'title' => $request->title,
             'description' => $request->description,
+            'image' => $imagePath,
             'target_donation' => $request->target_donation,
             'end_date' => $request->end_date,
-            'image' => $imagePath,
-            'status' => 'active', // Default status saat dibuat
-            'current_donation' => 0, // Default donasi awal
+            'status' => 'active',
+            'current_donation' => 0,
         ]);
 
-        // 5. Redirect dengan Pesan Sukses
         return redirect()->route('komunitas.my-programs')->with('success', 'Campaign baru berhasil dibuat!');
     }
 }

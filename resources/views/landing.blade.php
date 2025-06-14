@@ -124,84 +124,46 @@
         </div>
     </section>
 
-    <!-- Program Unggulan -->
-    <section id="programs" class="programs">
-        <div class="container">
-            <h2>Program Unggulan</h2>
-            <p class="section-description">Dukung berbagai inisiatif sosial yang sedang berjalan.</p>
+  <section id="programs" class="programs">
+    <div class="container">
+        <h2>Program Unggulan</h2>
+        <p class="section-description">Dukung berbagai inisiatif sosial yang sedang berjalan.</p>
 
-            <div class="programs-grid">
+        <div class="programs-grid">
+            @if($featuredCampaigns->isEmpty())
+                <p class="text-center" style="grid-column: 1 / -1;">Belum ada program unggulan saat ini.</p>
+            @else
+                @foreach ($featuredCampaigns as $campaign)
                 <div class="program-card">
                     <div class="program-image">
-                        <img src="https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
-                            alt="Education program">
+                        {{-- Kode ini sekarang aman karena ada di dalam loop --}}
+                        <img src="{{ str_starts_with($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}" alt="{{ $campaign->title }}">
                         <div class="progress-bar">
-                            <div class="progress" style="width: 75%;"></div>
+                            <div class="progress" style="width: {{ $campaign->donation_percentage }}%;"></div>
                         </div>
                     </div>
                     <div class="program-content">
-                        <h3>Pendidikan untuk Semua</h3>
-                        <p class="organization">Yayasan Peduli Pendidikan</p>
+                        <h3>{{ $campaign->title }}</h3>
+                        <p class="organization">{{ $campaign->komunitas->nama_organisasi ?? 'Komunitas GANDENG' }}</p>
                         <div class="program-details">
                             <div class="target">
-                                <span>Target: Rp 250jt</span>
-                                <span>Terkumpul: Rp 187jt</span>
+                                <span>Terkumpul: Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span>
+                                <span>Target: Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}</span>
                             </div>
+                            {{-- Link yang benar dengan variabel $campaign yang valid --}}
                             <a href="{{ route('campaigns.show') }}" class="btn-small">Dukung</a>
                         </div>
-                        <a href="#" class="btn-small">Dukung</a>
                     </div>
                 </div>
-            </div>
-
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
-                        alt="Environment program">
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 45%;"></div>
-                    </div>
-                </div>
-                <div class="program-content">
-                    <h3>Penghijauan Kota</h3>
-                    <p class="organization">Komunitas Hijau Lestari</p>
-                    <div class="program-details">
-                        <div class="target">
-                            <span>Target: Rp 150jt</span>
-                            <span>Terkumpul: Rp 67.5jt</span>
-                        </div>
-                        <a href="#" class="btn-small">Dukung</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="https://images.unsplash.com/photo-1579684453423-f84349ef60b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
-                        alt="Health program">
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 90%;"></div>
-                    </div>
-                </div>
-                <div class="program-content">
-                    <h3>Kesehatan Pedesaan</h3>
-                    <p class="organization">Rumah Sehat Indonesia</p>
-                    <div class="program-details">
-                        <div class="target">
-                            <span>Target: Rp 180jt</span>
-                            <span>Terkumpul: Rp 162jt</span>
-                        </div>
-                        <a href="#" class="btn-small">Dukung</a>
-                    </div>
-                </div>
-            </div>
+                @endforeach
+            @endif
         </div>
 
         <div class="view-all">
             <a href="{{ route('campaigns.index') }}" class="btn-secondary">Lihat Semua Program</a>
         </div>
-        </div>
-    </section>
+    </div>
+</section>
 
     <!-- Testimoni -->
     <section class="testimonials">
