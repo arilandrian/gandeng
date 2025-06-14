@@ -32,18 +32,26 @@ Route::post('/logout', [LoginController::class, 'logout']) // TETAP
 
 // --- Rute untuk Registrasi ---
 
+Route::get('/register', [RegisterController::class, 'showChoiceForm'])->name('register.choice');
+
 // Halaman Registrasi Donatur (GET - untuk menampilkan form)
-Route::get('/register/donatur', [RegisterController::class, 'showRegisterDonaturForm']) // DIUBAH (Anda perlu membuat method ini)
+Route::get('/register/donatur', [RegisterController::class, 'showDonaturForm'])
     ->middleware('guest')->name('register.donatur.form');
 
 // Memproses pendaftaran donatur (POST - untuk submit form)
-Route::post('/register/donatur', [RegisterController::class, 'registerDonatur']) // TETAP
+Route::post('/register/donatur', [RegisterController::class, 'registerDonatur'])
     ->middleware('guest')
     ->name('register.donatur');
 
 // Halaman Registrasi Organisasi (GET - untuk menampilkan form)
-Route::get('/register/organisasi', [RegisterController::class, 'showRegisterOrganisasiForm']) // DIUBAH (Anda perlu membuat method ini)
-    ->middleware('guest')->name('register.organisasi.form');
+Route::get('/register/organisasi', [RegisterController::class, 'showKomunitasForm'])
+    ->middleware('guest')->name('register.komunitas.form');
+
+// --- TAMBAHKAN RUTE DI BAWAH INI ---
+// Memproses pendaftaran organisasi (POST - untuk submit form)
+Route::post('/register/organisasi', [RegisterController::class, 'registerOrganisasi'])
+    ->middleware('guest')
+    ->name('register.komunitas');
 
 // --- Rute untuk Halaman Publik (tanpa login diperlukan) ---
 
@@ -61,31 +69,28 @@ Route::get('/donations/create', [DonationController::class, 'createForm'])->name
 
 // --- Rute untuk Dashboard Donatur (membutuhkan login sebagai donatur) ---
 
-// Rute Dashboard Donatur
-Route::get('/dashboard/donatur', [DonaturController::class, 'dashboard'])
-  ->middleware(['auth', 'role:donatur']) // Penting: auth dan role:donatur
-  ->name('donatur.dashboard');
-
-// Rute untuk menampilkan Riwayat Donasi Donatur
-Route::get('/donatur/history', [DonaturController::class, 'history'])->name('donatur.donation_history'); // DIUBAH
-
-// Rute untuk menampilkan Riwayat Ulasan Donatur
-Route::get('/donatur/reviews', [DonaturController::class, 'reviews'])->name('donatur.reviews_history'); // DIUBAH
+// Grup untuk Donatur
+Route::middleware(['auth', 'role:donatur'])->prefix('dashboard/donatur')->group(function () {
+    Route::get('/', [DonaturController::class, 'dashboard'])->name('donatur.dashboard');
+    
+    // -- TAMBAHKAN DUA RUTE INI --
+    Route::get('/history', [DonaturController::class, 'history'])->name('donatur.history');
+    Route::get('/reviews', [DonaturController::class, 'reviews'])->name('donatur.reviews');
+    // ----------------------------
+});
 
 
 // --- Rute untuk Dashboard Komunitas (membutuhkan login sebagai komunitas) ---
 
-// Rute Dashboard Komunitas
-Route::get('/dashboard/komunitas', [KomunitasController::class, 'dashboard'])
-  ->middleware(['auth', 'role:komunitas']) // Penting: auth dan role:komunitas
-  ->name('komunitas.dashboard');
-
-// Rute untuk menampilkan formulir Buat Kampanye
-Route::get('/komunitas/campaigns/create', [KomunitasController::class, 'createCampaignForm'])->name('komunitas.create_campaign'); // DIUBAH
-
-// Rute untuk menampilkan halaman Program Saya
-Route::get('/komunitas/my-programs', [KomunitasController::class, 'myPrograms'])->name('komunitas.my_programs'); // DIUBAH
-
+// Grup untuk Komunitas
+Route::middleware(['auth', 'role:komunitas'])->prefix('dashboard/komunitas')->group(function () {
+    Route::get('/', [KomunitasController::class, 'dashboard'])->name('komunitas.dashboard');
+    Route::get('/programs', [KomunitasController::class, 'myPrograms'])->name('komunitas.my-programs');
+    Route::get('/create-campaign', [CampaignController::class, 'create'])->name('campaigns.create');
+    
+    // -- TAMBAHKAN RUTE INI --
+    Route::post('/create-campaign', [CampaignController::class, 'store'])->name('campaigns.store');
+});
 // Rute untuk menampilkan halaman Laporan Anggaran
 Route::get('/komunitas/budget-report', [KomunitasController::class, 'budgetReport'])->name('komunitas.budget_report'); // DIUBAH
 

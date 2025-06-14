@@ -1,16 +1,16 @@
 <?php
+// File: app/Models/User.php
 
 namespace App\Models;
 
-// Pastikan import trait dan kelas yang dibutuhkan
-use Illuminate\Contracts\Auth\MustVerifyEmail; // Opsional, jika fitur verifikasi email diaktifkan
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne; // Untuk relasi one-to-one (Komunitas, Donatur)
-use Illuminate\Database\Eloquent\Relations\HasMany; // Untuk relasi one-to-many (Donation, Review)
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable // Memastikan kelas ini meng-extend Authenticatable
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -23,7 +23,7 @@ class User extends Authenticatable // Memastikan kelas ini meng-extend Authentic
         'name',
         'email',
         'password',
-        'role', // Penting: tambahkan 'role' agar bisa di-assign secara massal
+        'role',
     ];
 
     /**
@@ -42,15 +42,12 @@ class User extends Authenticatable // Memastikan kelas ini meng-extend Authentic
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime', // Mengubah ke objek datetime
-        'password' => 'hashed', // Menggunakan hashing otomatis oleh Laravel
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     /**
-     * Get the komunitas associated with the User.
-     * Ini adalah relasi one-to-one (satu user bisa jadi satu komunitas)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Get the komunitas profile associated with the user.
      */
     public function komunitas(): HasOne
     {
@@ -58,10 +55,7 @@ class User extends Authenticatable // Memastikan kelas ini meng-extend Authentic
     }
 
     /**
-     * Get the donatur associated with the User.
-     * Ini adalah relasi one-to-one (satu user bisa jadi satu donatur)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Get the donatur profile associated with the user.
      */
     public function donatur(): HasOne
     {
@@ -69,24 +63,20 @@ class User extends Authenticatable // Memastikan kelas ini meng-extend Authentic
     }
 
     /**
-     * Get all of the donations for the User.
-     * Ini adalah relasi one-to-many (satu user bisa punya banyak donasi)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the donations for the user.
      */
     public function donations(): HasMany
     {
+        // Pastikan foreign key di tabel 'donations' adalah 'user_id'
         return $this->hasMany(Donation::class);
     }
 
     /**
-     * Get all of the reviews for the User.
-     * Ini adalah relasi one-to-many (satu user bisa punya banyak ulasan)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the reviews for the user.
      */
     public function reviews(): HasMany
     {
+        // Pastikan foreign key di tabel 'reviews' adalah 'user_id'
         return $this->hasMany(Review::class);
     }
 }

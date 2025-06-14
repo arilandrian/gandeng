@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard/donatur'; // <--- Ini diatur ke dashboard default donatur
+    public const HOME = '/'; // Arahkan ke landing page sebagai default yang aman
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

@@ -10,19 +10,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;   // Untuk relasi hasMany (k
 class Komunitas extends Model
 {
     use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'user_id',
-        'nama_organisasi',
+        'user_id', 
+        'nama_organisasi', 
         'nomor_telepon',
         'kategori_organisasi',
         'document_path',
         'status_validasi',
+        'alamat', // Jika masih ada di migrasi Anda
     ];
 
     /**

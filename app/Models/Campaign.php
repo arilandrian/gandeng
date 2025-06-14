@@ -1,11 +1,11 @@
 <?php
+// File: app/Models/Campaign.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo; // Untuk relasi belongsTo (ke Komunitas)
-use Illuminate\Database\Eloquent\Relations\HasMany;   // Untuk relasi hasMany (ke Donation, Review, BudgetReport)
+use Illuminate\Support\Str; // Import class Str
 
 class Campaign extends Model
 {
@@ -19,75 +19,32 @@ class Campaign extends Model
     protected $fillable = [
         'komunitas_id',
         'title',
+        'slug',
         'description',
-        'category',
-        'location',
-        'target_amount',
-        'current_amount',
-        'target_items',
-        'current_items',
-        'start_date',
+        'image',
+        'target_donation',
+        'current_donation',
         'end_date',
-        'image_url',
-        'document_url',
         'status',
     ];
 
     /**
-     * The attributes that should be cast.
+     * The "booted" method of the model.
      *
-     * @var array<string, string>
+     * @return void
      */
-    protected $casts = [
-        'target_amount' => 'decimal:2',
-        'current_amount' => 'decimal:2',
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'status' => 'string', // Mengkonfirmasi tipe enum sebagai string
-        'category' => 'string', // Mengkonfirmasi tipe enum sebagai string
-    ];
+    protected static function booted()
+    {
+        static::creating(function ($campaign) {
+            $campaign->slug = Str::slug($campaign->title);
+        });
+    }
 
     /**
-     * Get the komunitas that owns the Campaign.
-     * Ini adalah relasi many-to-one (satu kampanye dimiliki oleh satu komunitas)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the community that owns the campaign.
      */
-    public function komunitas(): BelongsTo
+    public function komunitas()
     {
         return $this->belongsTo(Komunitas::class);
-    }
-
-    /**
-     * Get all of the donations for the Campaign.
-     * Ini adalah relasi one-to-many (satu kampanye memiliki banyak donasi)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function donations(): HasMany
-    {
-        return $this->hasMany(Donation::class);
-    }
-
-    /**
-     * Get all of the reviews for the Campaign.
-     * Ini adalah relasi one-to-many (satu kampanye memiliki banyak ulasan)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
-    }
-
-    /**
-     * Get all of the budget reports for the Campaign.
-     * Ini adalah relasi one-to-many (satu kampanye memiliki banyak laporan anggaran)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function budgetReports(): HasMany
-    {
-        return $this->hasMany(BudgetReport::class);
     }
 }

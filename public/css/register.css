@@ -19,13 +19,13 @@ body {
 }
 
 .btn-gandeng {
-    background-color: #28a745; /* Warna hijau untuk tombol 'Daftar' */
+    background-color: #4db6ac; /* Warna hijau untuk tombol 'Daftar' */
     color: white;
     border: none;
 }
 
 .btn-gandeng:hover {
-    background-color: #218838;
+    background-color: #45a49a;
 }
 
 /* Gaya untuk header dan tombol kembali */

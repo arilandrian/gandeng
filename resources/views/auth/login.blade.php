@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - GANDENG</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins:400|Inter:400" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-    </head>
+</head>
+
 <body>
     <div class="login">
         <div class="container">
@@ -37,9 +39,13 @@
                     </div>
                     <button type="submit" class="login-button">Masuk</button>
                 </form>
-                <p class="register-link">Belum punya akun? <a href="{{ route('register.donatur.form') }}">Daftar Sekarang</a></p>
+                <p class="text-center mt-3">
+                    Belum punya akun?
+                    <a href="{{ route('register.choice') }}">Daftar Sekarang</a>
+                </p>
             </div>
         </div>
     </div>
 </body>
+
 </html>
