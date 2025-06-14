@@ -1,0 +1,49 @@
+/* Gaya dasar untuk layout halaman registrasi */
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Poppins', sans-serif; /* Terapkan font Poppins */
+}
+
+.register-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px; /* Lebar yang sesuai untuk form registrasi */
+}
+
+.btn-gandeng {
+    background-color: #28a745; /* Warna hijau untuk tombol 'Daftar' */
+    color: white;
+    border: none;
+}
+
+.btn-gandeng:hover {
+    background-color: #218838;
+}
+
+/* Gaya untuk header dan tombol kembali */
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header .back-arrow {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    color: #333;
+}
+
+.header h4 {
+    flex-grow: 1; /* Memungkinkan judul mengambil ruang sisa */
+    text-align: center;
+    margin: 0;
+    font-weight: 600;
+}

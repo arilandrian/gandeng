@@ -1,0 +1,233 @@
+/* General styles - assuming global styles.css handles basic body, container, navbar, footer */
+
+.admin-dashboard-container {
+    padding: 40px 0;
+    background-color: var(--background-light); /* From styles.css */
+}
+
+.admin-header {
+    text-align: center;
+    margin-bottom: 40px;
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-color); /* From styles.css */
+    margin-bottom: 10px;
+}
+
+.admin-header h1 i {
+    color: var(--secondary-color); /* From styles.css */
+}
+
+.admin-header p {
+    color: var(--text-light); /* From styles.css */
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Summary Cards */
+.summary-cards-admin {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.summary-card-admin {
+    background-color: var(--white); /* From styles.css */
+    border-radius: var(--radius-md); /* From styles.css */
+    box-shadow: var(--shadow-sm); /* From styles.css */
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 4px solid transparent;
+}
+
+.summary-card-admin:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md); /* From styles.css */
+}
+
+.summary-card-admin .icon {
+    font-size: 48px;
+    color: var(--primary-color); /* Default icon color */
+}
+
+.summary-card-admin .value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color); /* From styles.css */
+}
+
+.summary-card-admin .label {
+    font-size: 1rem;
+    color: var(--text-light); /* From styles.css */
+}
+
+/* Specific card colors */
+.summary-card-admin.campaigns .icon { color: var(--secondary-color); }
+.summary-card-admin.donations .icon { color: #28a745; /* green */ }
+.summary-card-admin.users .icon { color: #007bff; /* blue */ }
+.summary-card-admin.pending .icon { color: #ffc107; /* yellow */ }
+
+.summary-card-admin.campaigns { border-color: var(--secondary-color); }
+.summary-card-admin.donations { border-color: #28a745; }
+.summary-card-admin.users { border-color: #007bff; }
+.summary-card-admin.pending { border-color: #ffc107; }
+
+
+/* Section Header */
+.section-header-admin {
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--gray-light);
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.section-header-admin h2 {
+    font-size: 24px;
+    color: var(--primary-color); /* From styles.css */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.section-header-admin h2 i {
+    color: var(--secondary-color); /* From styles.css */
+}
+
+.btn-view-all {
+    background-color: var(--primary-light); /* From styles.css */
+    color: var(--primary-color); /* From styles.css */
+    padding: 8px 15px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.btn-view-all:hover {
+    background-color: rgba(0, 45, 114, 0.2);
+}
+
+/* Recent Activity/Tables (General Table Styles) */
+.admin-table-wrapper {
+    background-color: var(--white); /* From styles.css */
+    border-radius: var(--radius-md); /* From styles.css */
+    box-shadow: var(--shadow-sm); /* From styles.css */
+    overflow-x: auto;
+    margin-bottom: 40px;
+}
+
+.admin-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table-wrapper th,
+.admin-table-wrapper td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-light); /* From styles.css */
+    white-space: nowrap;
+}
+
+.admin-table-wrapper th {
+    background-color: var(--background-light); /* From styles.css */
+    font-weight: 600;
+    color: var(--primary-color); /* From styles.css */
+    font-size: 0.95rem;
+}
+
+.admin-table-wrapper td {
+    color: var(--text-color); /* From styles.css */
+    font-size: 0.9rem;
+}
+
+.admin-table-wrapper tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Table Status Badges (reuse from my-programs or define new) */
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-badge.pending {
+    background-color: #FFF3E0; /* Light orange */
+    color: #E65100; /* Dark orange */
+}
+
+.status-badge.active {
+    background-color: #E8F5E9; /* Light green */
+    color: #2E7D32; /* Dark green */
+}
+
+.status-badge.rejected {
+    background-color: #FFEBEE; /* Light red */
+    color: #C62828; /* Dark red */
+}
+
+.status-badge.completed {
+    background-color: #E3F2FD; /* Light blue */
+    color: #1565C0; /* Dark blue */
+}
+
+/* Action buttons in tables */
+.btn-table-action {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+.btn-table-action:hover {
+    background-color: rgba(0, 45, 114, 0.2);
+}
+.btn-table-action.approve {
+    background-color: var(--secondary-light);
+    color: var(--secondary-color);
+}
+.btn-table-action.approve:hover {
+    background-color: rgba(77, 182, 172, 0.2);
+}
+.btn-table-action.reject {
+    background-color: #FFEBEE;
+    color: #C62828;
+}
+.btn-table-action.reject:hover {
+    background-color: #FFCDD2;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .summary-cards-admin {
+        grid-template-columns: 1fr;
+    }
+}
