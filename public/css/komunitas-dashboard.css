@@ -31,7 +31,10 @@ body {
     line-height: 1.6;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-weight: 600;
     line-height: 1.3;
 }
@@ -187,6 +190,14 @@ img {
 
 /* Stats Summary */
 .stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.summary-cards {
+    /* Tambahkan ini di komunitas-dashboard.css */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
@@ -407,7 +418,8 @@ img {
     margin-top: 20px;
 }
 
-.btn-manage, .btn-detail {
+.btn-manage,
+.btn-detail {
     flex: 1;
     display: flex;
     align-items: center;
@@ -445,11 +457,11 @@ img {
     .nav-links {
         display: none;
     }
-    
+
     .menu-toggle {
         display: block;
     }
-    
+
     .program-grid {
         grid-template-columns: 1fr;
     }
@@ -459,12 +471,17 @@ img {
     .stats-summary {
         grid-template-columns: 1fr;
     }
-    
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
     .program-actions {
         flex-direction: column;
     }
-    
-    .btn-manage, .btn-detail {
+
+    .btn-manage,
+    .btn-detail {
         width: 100%;
     }
 }
@@ -473,17 +490,253 @@ img {
     .dashboard-header h1 {
         font-size: 24px;
     }
-    
+
     .logo-text {
         font-size: 18px;
     }
-    
+
     .user-menu {
         gap: 10px;
     }
-    
+
     .user-avatar {
         width: 32px;
         height: 32px;
     }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .footer-legal {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Styling untuk Tombol Primer (btn-primary) */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Untuk memusatkan teks jika hanya ada teks */
+    gap: 10px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    border: none;
+    /* Pastikan tidak ada border default */
+    cursor: pointer;
+    /* Menunjukkan bahwa ini dapat diklik */
+    font-size: 15px;
+    /* Sesuaikan ukuran font */
+    text-align: center;
+    white-space: nowrap;
+    /* Mencegah teks putus baris */
+}
+
+.btn-primary:hover {
+    background-color: #001F4C;
+    /* Warna lebih gelap dari primary-color */
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Jika ada kebutuhan untuk tombol sekunder atau outline */
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    /* ... gaya yang sama dengan btn-primary ... */
+}
+
+/* Bagian Donasi Terbaru */
+.recent-donations {
+    margin-bottom: 40px;
+    background-color: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 25px;
+    /* Sesuaikan padding */
+}
+
+.recent-donations h2 {
+    font-size: 20px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gray-light);
+    /* Garis bawah untuk judul */
+}
+
+.donation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Jarak antar item donasi */
+    margin-bottom: 25px;
+    /* Jarak antara daftar donasi dan tombol "Lihat Semua" */
+}
+
+.donation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--background-light);
+    /* Latar belakang untuk setiap item */
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-light);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease-in-out;
+}
+
+.donation-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.donation-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.donation-info p {
+    font-size: 14px;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.donation-date {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 400;
+    min-width: 90px;
+    /* Agar tanggal tidak terlalu pendek */
+    text-align: right;
+}
+
+/* Sesuaikan ukuran font dan padding untuk responsif */
+@media (max-width: 768px) {
+    .recent-donations {
+        padding: 20px;
+    }
+
+    .recent-donations h2 {
+        font-size: 18px;
+    }
+
+    .donation-item {
+        flex-direction: column;
+        /* Tumpuk info di layar kecil */
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .donation-date {
+        text-align: left;
+        width: 100%;
+    }
+
+    .btn-primary {
+        width: 100%;
+        /* Tombol full width di layar kecil */
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: #00214d;
+    color: var(--white);
+    padding: 60px 0 0;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-about h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.footer-about p {
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+.footer-links h3,
+.footer-contact h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.footer-links ul {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: var(--secondary-color);
+}
+
+.footer-contact ul {
+    list-style: none;
+}
+
+.footer-contact li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-contact i {
+    width: 20px;
+    text-align: center;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.footer-legal {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-legal a:hover {
+    color: var(--secondary-color);
 }
