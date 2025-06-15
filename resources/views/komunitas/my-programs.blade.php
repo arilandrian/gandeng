@@ -58,7 +58,7 @@
                     <div class="col-donation">Rp 3.500.000</div>
                     <div class="col-date">01 Mei 2025</div>
                     <div class="col-actions">
-                        <a href="{{ route('campaigns.show') }}" class="btn btn-outline">Lihat Detail</a>
+                        <a href="{{ route('campaigns.show', $campaign) }}" class="btn-detail">Lihat Detail</a>
                         <a href="#" class="btn btn-outline">Edit</a>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     <div class="col-donation">Rp 5.200.000</div>
                     <div class="col-date">20 Mar 2025</div>
                     <div class="col-actions">
-                        <a href="{{ route('campaigns.show') }}" class="btn btn-outline">Lihat Detail</a>
+                        <a href="{{ route('campaigns.show', $campaign) }}" class="btn-detail">Lihat Detail</a>
                         <a href="#" class="btn btn-outline report">Lihat Laporan</a>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                     <div class="col-donation">Rp 1.750.000</div>
                     <div class="col-date">10 Jun 2025</div>
                     <div class="col-actions">
-                        <a href="{{ route('campaigns.show') }}" class="btn btn-outline">Lihat Detail</a>
+                        <a href="{{ route('campaigns.show', $campaign) }}" class="btn-detail">Lihat Detail</a>
                         <a href="#" class="btn btn-outline">Edit</a>
                     </div>
                 </div>

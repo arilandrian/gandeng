@@ -60,19 +60,21 @@ Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.
 
 // Rute untuk menampilkan Detail Kampanye
 // NANTINYA AKAN MENJADI Route::get('/campaigns/{id}', [CampaignController::class, 'show'])
-Route::get('/campaigns/detail', [CampaignController::class, 'showDetail'])->name('campaigns.show'); // DIUBAH (showDetail karena show akan untuk dinamis)
+Route::get('/campaigns/{campaign:slug}', [CampaignController::class, 'show'])->name('campaigns.show');
 
 // Rute untuk menampilkan Form Donasi
 // NANTINYA AKAN MENJADI Route::get('/campaigns/{id}/donate', [DonationController::class, 'create'])
-Route::get('/donations/create', [DonationController::class, 'createForm'])->name('donations.create'); // DIUBAH (createForm karena create akan untuk dinamis)
+Route::get('/campaigns/{campaign:slug}/donate', [DonationController::class, 'create'])->name('donations.create');
 
+// TAMBAHKAN RUTE INI untuk menangani pengiriman form
+Route::post('/donations', [DonationController::class, 'store'])->name('donations.store');
 
 // --- Rute untuk Dashboard Donatur (membutuhkan login sebagai donatur) ---
 
 // Grup untuk Donatur
 Route::middleware(['auth', 'role:donatur'])->prefix('dashboard/donatur')->group(function () {
     Route::get('/', [DonaturController::class, 'dashboard'])->name('donatur.dashboard');
-    
+
     // -- TAMBAHKAN DUA RUTE INI --
     Route::get('/history', [DonaturController::class, 'history'])->name('donatur.history');
     Route::get('/reviews', [DonaturController::class, 'reviews'])->name('donatur.reviews');
@@ -87,22 +89,23 @@ Route::middleware(['auth', 'role:komunitas'])->prefix('dashboard/komunitas')->gr
     Route::get('/', [KomunitasController::class, 'dashboard'])->name('komunitas.dashboard');
     Route::get('/programs', [KomunitasController::class, 'myPrograms'])->name('komunitas.my-programs');
     Route::get('/create-campaign', [CampaignController::class, 'create'])->name('campaigns.create');
-    
+
     // -- TAMBAHKAN RUTE INI --
     Route::post('/create-campaign', [CampaignController::class, 'store'])->name('campaigns.store');
-});
-// Rute untuk menampilkan halaman Laporan Anggaran
-Route::get('/komunitas/budget-report', [KomunitasController::class, 'budgetReport'])->name('komunitas.budget_report'); // DIUBAH
+    // Rute untuk menampilkan halaman Laporan Anggaran
+    Route::get('/komunitas/budget-report', [KomunitasController::class, 'budgetReport'])->name('komunitas.budget_report'); // DIUBAH
 
-// Rute untuk menampilkan halaman Ulasan Donatur
-Route::get('/komunitas/donor-reviews', [KomunitasController::class, 'donorReviews'])->name('komunitas.donor_reviews'); // DIUBAH
+    // Rute untuk menampilkan halaman Ulasan Donatur
+    Route::get('/komunitas/donor-reviews', [KomunitasController::class, 'donorReviews'])->name('komunitas.donor_reviews'); // DIUBAH
+});
+
 
 // --- Rute untuk Dashboard Admin (membutuhkan login sebagai admin) ---
 
 // Rute Dashboard Admin
 Route::get('/dashboard/admin', [AdminController::class, 'dashboard'])
-  ->middleware(['auth', 'role:admin']) // Penting: auth dan role:admin
-  ->name('admin.dashboard');
+    ->middleware(['auth', 'role:admin']) // Penting: auth dan role:admin
+    ->name('admin.dashboard');
 
 // --- Rute POST yang akan diaktifkan di kemudian hari (contoh) ---
 /*

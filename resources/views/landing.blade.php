@@ -151,7 +151,7 @@
                                 <span>Target: Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}</span>
                             </div>
                             {{-- Link yang benar dengan variabel $campaign yang valid --}}
-                            <a href="{{ route('campaigns.show') }}" class="btn-small">Dukung</a>
+                            <a href="{{ route('campaigns.show', $campaign) }}" class="btn-small">Dukung</a>
                         </div>
                     </div>
                 </div>

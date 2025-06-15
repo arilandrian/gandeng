@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="d-grid">
-                     <a href="#" class="btn btn-primary btn-lg">Donasi Sekarang</a>
+                     <a href="{{ route('donations.create', $campaign) }}" class="btn btn-primary btn-lg">Donasi Sekarang</a>
                 </div>
 
                 <ul class="list-group list-group-flush mt-4">

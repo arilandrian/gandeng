@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('campaigns.show') }}" class="btn-detail">Lihat Program</a>
+                    <a href="{{ route('campaigns.show', $campaign) }}" class="btn-detail">Lihat Program</a>
                 </div>
 
                 <div class="donation-card">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('campaigns.show', $campaign->slug) }}" class="btn-detail">Lihat Program</a>
+                    <a href="{{ route('campaigns.show', $campaign) }}" class="btn-detail">Lihat Program</a>
                 </div>
 
                 <div class="donation-card">
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('campaigns.show', $campaign->slug) }}" class="btn-detail">Lihat Program</a>
+                    <a href="{{ route('campaigns.show', $campaign) }}" class="btn-detail">Lihat Program</a>
                 </div>
             </div>
 

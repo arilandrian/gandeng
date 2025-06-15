@@ -85,10 +85,9 @@
                             </div>
 
                             <div class="card-actions">
-                                <a href="{{ route('campaigns.show')}}" class="btn-detail">Lihat
+                                <a href="{{ route('campaigns.show',  $campaign)}}" class="btn-detail">Lihat
                                     Detail</a>
-                                <a href="{{ route('campaigns.show') }}" class="btn-donate-now">Donasi
-                                    Sekarang</a>
+                               <a href="{{ route('donations.create', $campaign) }}" class="btn btn-primary btn-lg btn-donate-main">Donasi Sekarang</a>
                             </div>
                         </div>
                     </div>
