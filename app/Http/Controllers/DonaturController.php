@@ -1,9 +1,8 @@
 <?php
-// File: app/Http/Controllers/DonaturController.php
-
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
+use App\Models\Campaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,40 +20,65 @@ class DonaturController extends Controller
         $jumlahCampaign = $user->donations()->distinct('campaign_id')->count();
         $jumlahUlasan = $user->reviews()->count();
 
-        // --- PERBAIKAN PADA QUERY INI ---
-        $programDidukung = Donation::with('campaign')
+        $programDidukung = Donation::with(['campaign', 'campaign.organization'])
             ->where('user_id', $user->id)
             ->select(
                 'campaign_id',
                 DB::raw('SUM(amount) as total_donasi_per_campaign'),
-                DB::raw('MAX(created_at) as tanggal_donasi_terakhir') // 1. Ambil tanggal donasi terbaru
+                DB::raw('MAX(created_at) as tanggal_donasi_terakhir')
             )
             ->groupBy('campaign_id')
-            ->orderBy('tanggal_donasi_terakhir', 'desc') // 2. Urutkan berdasarkan tanggal terbaru itu
+            ->orderBy('tanggal_donasi_terakhir', 'desc')
             ->get();
-        // --- AKHIR PERBAIKAN ---
+
+        $rekomendasiProgram = Campaign::with('organization')
+            ->whereNotIn('id', $user->donations()->pluck('campaign_id'))
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
 
         return view('donatur.dashboard', [
             'totalDonasi' => $totalDonasi,
             'jumlahCampaign' => $jumlahCampaign,
             'jumlahUlasan' => $jumlahUlasan,
             'programDidukung' => $programDidukung,
+            'rekomendasiProgram' => $rekomendasiProgram
         ]);
     }
-    
+
+    /**
+     * Menampilkan detail program
+     */
+    public function showProgram($id)
+    {
+        $program = Campaign::with('organization')->findOrFail($id);
+        return view('donatur.program-detail', compact('program'));
+    }
+
+    /**
+     * Menampilkan form donasi
+     */
+    public function createDonation($campaignId)
+    {
+        $campaign = Campaign::findOrFail($campaignId);
+        return view('donations.create', compact('campaign'));
+    }
+
     /**
      * Menampilkan riwayat donasi donatur.
      */
     public function history()
     {
-        return view('donatur.history');
+        $donations = Auth::user()->donations()->with('campaign')->latest()->get();
+        return view('donatur.history', compact('donations'));
     }
 
     /**
-     * Menampilkan riwayat ulasan donatur (ulasan yang diberikan oleh donatur).
+     * Menampilkan riwayat ulasan donatur
      */
     public function reviews()
     {
-        return view('donatur.reviews');
+        $reviews = Auth::user()->reviews()->with('campaign')->latest()->get();
+        return view('donatur.reviews', compact('reviews'));
     }
 }
