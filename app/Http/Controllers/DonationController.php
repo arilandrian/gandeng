@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule; // Pastikan ini ada
 
 class DonationController extends Controller
 {
@@ -29,33 +30,36 @@ class DonationController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi data umum
-        $validated = $request->validate([
+        $rules = [
             'campaign_id' => 'required|exists:campaigns,id',
             'donation_type' => 'required|in:money,goods',
             'donatur_name' => 'required|string|max:255',
             'donatur_email' => 'required|email|max:255',
             'is_anonymous' => 'nullable|boolean',
             'additional_notes' => 'nullable|string|max:500',
+        ];
 
-            // Validasi kondisional untuk donasi uang
-            'amount' => 'required_if:donation_type,money|numeric|min:10000',
-            'payment_method' => 'required_if:donation_type,money|string',
+        // Menambahkan aturan validasi berdasarkan jenis donasi
+        // PERHATIKAN PERUBAHAN DI SINI UNTUK MEMASTIKAN `min:10000` HANYA UNTUK `amount`
+        $rules['amount'] = Rule::when($request->donation_type === 'money', ['required', 'numeric', 'min:10000']);
+        $rules['payment_method'] = Rule::when($request->donation_type === 'money', ['required', 'string']);
 
-            // Validasi kondisional untuk donasi barang
-            'item_name' => 'required_if:donation_type,goods|string|max:255',
-            'item_quantity' => 'required_if:donation_type,goods|string|max:100',
-            'item_description' => 'nullable|string|max:1000',
-            'item_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        $rules['item_name'] = Rule::when($request->donation_type === 'goods', ['required', 'string', 'max:255']);
+        $rules['item_quantity'] = Rule::when($request->donation_type === 'goods', ['required', 'string', 'max:100']);
+        $rules['item_description'] = Rule::when($request->donation_type === 'goods', ['nullable', 'string', 'max:1000']);
+        $rules['item_photo'] = Rule::when($request->donation_type === 'goods', ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048']);
 
-        ]);
+        $validated = $request->validate($rules);
 
-        // Siapkan data untuk disimpan, termasuk kolom dari form Anda
+        // Siapkan data untuk disimpan
         $dataToStore = [
             'campaign_id' => $validated['campaign_id'],
             'user_id' => Auth::id(),
             'donation_type' => $validated['donation_type'],
-            'additional_notes' => $validated['message'] ?? null, // Sesuaikan dengan nama di form
+            'donatur_name' => $validated['donatur_name'],
+            'donatur_email' => $validated['donatur_email'],
+            'is_anonymous' => $validated['is_anonymous'] ?? false, 
+            'additional_notes' => $validated['additional_notes'] ?? null, 
             'status' => 'pending',
         ];
 
@@ -64,13 +68,16 @@ class DonationController extends Controller
                 $campaign = Campaign::find($validated['campaign_id']);
 
                 if ($validated['donation_type'] === 'money') {
+                    // Pastikan 'amount' dan 'payment_method' diambil dari $validated
                     $dataToStore['amount'] = $validated['amount'];
                     $dataToStore['payment_method'] = $validated['payment_method'];
-                    $campaign->increment('current_donation', $validated['amount']);
+                    $campaign->increment('current_amount', $validated['amount']); 
                 } elseif ($validated['donation_type'] === 'goods') {
+                    // Karena sudah divalidasi kondisional, field ini pasti ada di $validated jika donation_type == 'goods'
                     $dataToStore['item_name'] = $validated['item_name'];
                     $dataToStore['item_quantity'] = $validated['item_quantity'];
                     $dataToStore['item_description'] = $validated['item_description'] ?? null;
+                    
                     if ($request->hasFile('item_photo')) {
                         $path = $request->file('item_photo')->store('donation_items', 'public');
                         $dataToStore['item_photo_url'] = $path;
@@ -81,10 +88,10 @@ class DonationController extends Controller
             });
         } catch (\Throwable $e) {
             Log::error('Donation Error: ' . $e->getMessage());
-            return back()->with('error', 'Terjadi kesalahan, donasi Anda gagal diproses.');
+            return back()->withInput()->withErrors(['Terjadi kesalahan, donasi Anda gagal diproses.']); 
         }
 
         $campaign = Campaign::find($validated['campaign_id']);
-        return redirect()->route('campaigns.show', $campaign)->with('success', 'Terima kasih! Donasi Anda telah kami catat dan akan segera diproses.');
+        return redirect()->route('campaigns.show', $campaign->slug)->with('success', 'Terima kasih! Donasi Anda telah kami catat dan akan segera diproses.'); 
     }
 }
